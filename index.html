@@ -1,11 +1,299 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>무현 곽 | Cloud Engineer Rookie</title>
+  <meta name="description" content="클라우드 엔지니어를 목표로 하는 신입 개발자의 GitHub 소개 블로그" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@300;400;600;800&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#0b0e12;       /* dark base */
+      --panel:#11161d;    /* dark panel */
+      --text:#e7eef7;     /* light text */
+      --muted:#9fb2c7;    /* muted text */
+      --brand:#5ac8fa;    /* cyan */
+      --brand-2:#7ee787;  /* green */
+      --accent:#c297ff;   /* purple */
+      --danger:#ff7b7b;   /* red */
+      --ring: 0 0 0 2px color-mix(in oklab, var(--brand) 40%, transparent);
+      --radius: 18px;
+      --shadow: 0 8px 32px rgba(0,0,0,.35);
+    }
+    /* light mode via checkbox */
+    #theme:checked ~ main{ --bg:#f6f7fb; --panel:#ffffff; --text:#0a1220; --muted:#52607a; --brand:#007aff; --brand-2:#0f915a; --accent:#7a5af8; --danger:#e36464; }
+    #theme{ position: fixed; inset: 0; width:0; height:0; opacity:0; }
+
+    *{ box-sizing: border-box; }
+    html,body{ height:100%; }
+    body{ margin:0; font-family:"Pretendard", system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial; background:var(--bg); color:var(--text); }
+
+    .container{ max-width:1100px; margin-inline:auto; padding-inline:24px; }
+    header{ position:sticky; top:0; backdrop-filter:saturate(1.3) blur(10px); background:color-mix(in oklab, var(--bg) 70%, transparent); z-index:10; }
+    .nav{ display:flex; align-items:center; justify-content:space-between; gap:16px; padding:14px 0; }
+    .nav a{ color:var(--muted); text-decoration:none; font-weight:600; padding:10px 14px; border-radius:12px; }
+    .nav a:hover{ color:var(--text); background:color-mix(in oklab, var(--panel) 70%, transparent); }
+    .brand{ display:flex; align-items:center; gap:10px; font-weight:800; letter-spacing:.3px; }
+    .logo{ width:28px; height:28px; border-radius:9px; background:linear-gradient(135deg,var(--brand),var(--accent)); box-shadow:0 4px 14px color-mix(in oklab, var(--brand) 25%, transparent); }
+
+    .theme-toggle{ display:flex; align-items:center; gap:10px; }
+    .switch{ --s:42px; width:var(--s); height:24px; border-radius:999px; background:color-mix(in oklab, var(--panel) 80%, transparent); position:relative; cursor:pointer; box-shadow:inset 0 0 0 1px rgba(255,255,255,.06); }
+    .dot{ position:absolute; inset:3px auto 3px 3px; width:18px; height:18px; border-radius:50%; background:var(--text); transition:transform .25s ease; box-shadow:0 2px 8px rgba(0,0,0,.25); }
+    #theme:checked ~ header .dot{ transform:translateX(18px); }
+
+    .hero{ padding:64px 0 36px; }
+    .hero-grid{ display:grid; grid-template-columns: 1.2fr .8fr; gap:28px; align-items:center; }
+    @media (max-width:900px){ .hero-grid{ grid-template-columns:1fr; } }
+    .card{ background:var(--panel); border-radius:var(--radius); padding:28px; box-shadow:var(--shadow); border:1px solid color-mix(in oklab, var(--panel) 85%, var(--brand) 15%); }
+    h1{ font-size:40px; margin:0 0 10px; letter-spacing:-.5px; }
+    .subtitle{ color:var(--muted); font-size:18px; margin:0 0 16px; }
+    .badges{ display:flex; flex-wrap:wrap; gap:8px; margin:14px 0 20px; }
+    .badge{ padding:8px 12px; border-radius:999px; font-weight:700; font-size:13px; background:color-mix(in oklab, var(--brand) 15%, var(--panel) 85%); border:1px dashed color-mix(in oklab, var(--brand) 40%, var(--panel) 60%); }
+    .actions{ display:flex; flex-wrap:wrap; gap:12px; }
+    .btn{ display:inline-block; padding:12px 16px; border-radius:14px; text-decoration:none; font-weight:800; letter-spacing:.2px; background:var(--brand); color:#03111a; box-shadow:0 8px 24px color-mix(in oklab, var(--brand) 35%, transparent); }
+    .btn.secondary{ background:transparent; color:var(--text); outline:1px solid color-mix(in oklab, var(--text) 15%, transparent); }
+    .btn:hover{ transform:translateY(-1px); }
+
+    /* section headings */
+    section{ padding:24px 0; }
+    .section-title{ display:flex; align-items:center; justify-content:space-between; gap:12px; margin:0 0 14px; }
+    .section-title h2{ font-size:22px; margin:0; }
+    .section-title .hint{ color:var(--muted); font-size:14px; }
+
+    /* Roadmap */
+    .grid{ display:grid; grid-template-columns: repeat(12, 1fr); gap:18px; }
+    .col-6{ grid-column: span 6; }
+    .col-4{ grid-column: span 4; }
+    .col-3{ grid-column: span 3; }
+    .col-12{ grid-column: 1/-1; }
+    @media (max-width:900px){ .col-6,.col-4,.col-3{ grid-column:1/-1; } }
+
+    .step{ position:relative; padding:18px; border-radius:16px; background:linear-gradient(180deg, color-mix(in oklab, var(--panel) 94%, var(--brand) 6%), var(--panel)); border:1px solid color-mix(in oklab, var(--panel) 80%, var(--brand) 20%); box-shadow:var(--shadow); }
+    .step h3{ margin:0 0 8px; font-size:18px; }
+    .step p{ margin:0 0 10px; color:var(--muted); font-size:14px; }
+    .progress{ height:8px; border-radius:999px; background:color-mix(in oklab, var(--panel) 85%, var(--text) 15%); overflow:hidden; }
+    .bar{ height:100%; width:var(--w,20%); background:linear-gradient(90deg,var(--brand),var(--brand-2)); }
+
+    /* Projects */
+    .project{ display:flex; flex-direction:column; gap:10px; }
+    .project h3{ margin:0; font-size:18px; }
+    .pill{ display:inline-flex; gap:6px; align-items:center; padding:6px 10px; background:color-mix(in oklab, var(--accent) 16%, var(--panel) 84%); border:1px solid color-mix(in oklab, var(--accent) 40%, var(--panel) 60%); border-radius:999px; font-size:12px; font-weight:700; }
+    .meta{ color:var(--muted); font-size:13px; }
+    .list{ display:grid; gap:10px; }
+
+    /* Timeline */
+    .timeline{ position:relative; padding-left:18px; }
+    .timeline:before{ content:""; position:absolute; left:7px; top:4px; bottom:4px; width:2px; background:color-mix(in oklab, var(--brand) 35%, var(--panel) 65%); border-radius:2px; }
+    .t-item{ position:relative; padding:10px 0 10px 16px; }
+    .t-item:before{ content:""; position:absolute; left:-2px; top:14px; width:10px; height:10px; border-radius:50%; background:var(--brand); box-shadow:0 0 0 4px color-mix(in oklab, var(--brand) 20%, transparent); }
+
+    /* Footer */
+    footer{ padding:28px 0 60px; color:var(--muted); text-align:center; }
+    .link{ color:var(--text); text-decoration:none; border-bottom:1px dotted color-mix(in oklab, var(--text) 30%, transparent); }
+
+    /* anchor nav under header */
+    .subnav{ display:flex; gap:10px; flex-wrap:wrap; margin:14px 0 0; }
+    .subnav a{ font-size:13px; color:var(--muted); text-decoration:none; padding:6px 10px; border-radius:999px; background:color-mix(in oklab, var(--panel) 85%, transparent); }
+    .subnav a:hover{ color:var(--text); }
+  </style>
 </head>
 <body>
-    <h1>잘 부탁드립ㅇㅇ니다 뻥이야</h1>
+  <!-- CSS-only theme toggle -->
+  <input id="theme" type="checkbox" />
+
+  <header>
+    <div class="container nav">
+      <div class="brand">
+        <div class="logo" aria-hidden></div>
+        <span>무현 곽 · Cloud Engineer Rookie</span>
+      </div>
+      <nav class="hide-mobile">
+        <a href="#about">소개</a>
+        <a href="#roadmap">로드맵</a>
+        <a href="#projects">프로젝트</a>
+        <a href="#til">TIL</a>
+        <a href="#certs">자격 목표</a>
+        <a href="#contact">연락처</a>
+      </nav>
+      <label class="theme-toggle" for="theme" title="라이트/다크 전환 (CSS-only)">
+        <span style="font-size:12px;color:var(--muted);">Light</span>
+        <div class="switch"><div class="dot"></div></div>
+        <span style="font-size:12px;color:var(--muted);">Dark</span>
+      </label>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="container hero-grid">
+        <div class="card">
+          <h1>“현실에서 배우고 기록하며 성장하는 <span style="color:var(--brand)">클라우드 엔지니어</span>가 되겠습니다.”</h1>
+          <p class="subtitle">Java · SQL · Spring · Docker · AWS를 중심으로 백엔드와 인프라 기초를 다지고 있습니다. 문제를 끝까지 파고드는 집요함과, 매일의 기록(TIL)로 성장 로그를 남깁니다.</p>
+          <div class="badges">
+            <span class="badge">#Linux</span>
+            <span class="badge">#Networking</span>
+            <span class="badge">#Java</span>
+            <span class="badge">#SQL</span>
+            <span class="badge">#Spring</span>
+            <span class="badge">#Docker</span>
+            <span class="badge">#AWS</span>
+          </div>
+          <div class="actions">
+            <a class="btn" href="https://github.com/kwakmh" target="_blank" rel="noopener">GitHub 보러가기</a>
+            <a class="btn secondary" href="#projects">대표 프로젝트</a>
+          </div>
+          <div class="subnav">
+            <a href="#about">소개</a>
+            <a href="#roadmap">로드맵</a>
+            <a href="#projects">프로젝트</a>
+            <a href="#til">학습 기록</a>
+            <a href="#certs">자격 목표</a>
+            <a href="#contact">연락</a>
+          </div>
+        </div>
+        <div class="card">
+          <h2 id="about" style="margin:0 0 10px; font-size:20px;">간단 소개</h2>
+          <p class="meta">“작동하는 것을 넘어서, <strong>이해하고 설명할 수 있는 것</strong>”을 목표로 합니다. 네트워크/리눅스 기초를 바탕으로 백엔드(Java/Spring)와 데이터(SQL), 컨테이너(Docker), 그리고 AWS 기반 설계를 학습 중입니다.</p>
+          <ul class="list" style="margin:10px 0 0; padding-left:18px;">
+            <li>꾸준함: 매일 <strong>TIL</strong> 작성 및 주간 회고</li>
+            <li>문제해결: 에러의 원인을 <strong>근거</strong>와 함께 정리</li>
+            <li>보안 마인드: 최소권한·비밀관리·로그/모니터링 습관화</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section id="roadmap">
+      <div class="container">
+        <div class="section-title">
+          <h2>학습 로드맵 & 진행상황</h2>
+          <span class="hint">계획은 작게, 기록은 자세히</span>
+        </div>
+        <div class="grid">
+          <div class="step col-4"><h3>1) 기초: Linux & Network</h3><p>셸·프로세스·파일시스템·TCP/IP·SSH·방화벽 기초</p><div class="progress"><div class="bar" style="--w:70%"></div></div></div>
+          <div class="step col-4"><h3>2) Java</h3><p>문법·컬렉션·스트림·스레드·예외·테스트</p><div class="progress"><div class="bar" style="--w:55%"></div></div></div>
+          <div class="step col-4"><h3>3) SQL</h3><p>정규화·조인·트랜잭션·인덱스·실행계획</p><div class="progress"><div class="bar" style="--w:50%"></div></div></div>
+
+          <div class="step col-4"><h3>4) Spring</h3><p>DI/IoC·MVC·JPA·트랜잭션·검증·테스트</p><div class="progress"><div class="bar" style="--w:40%"></div></div></div>
+          <div class="step col-4"><h3>5) Docker</h3><p>이미지/컨테이너·Dockerfile·Compose·레지스트리</p><div class="progress"><div class="bar" style="--w:35%"></div></div></div>
+          <div class="step col-4"><h3>6) AWS</h3><p>VPC·EC2·S3·RDS·IAM·ALB·CloudWatch·SAA</p><div class="progress"><div class="bar" style="--w:30%"></div></div></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="projects">
+      <div class="container">
+        <div class="section-title"><h2>대표 프로젝트</h2><span class="hint">Github에 소스 및 회고 링크</span></div>
+        <div class="grid">
+          <article class="card project col-6">
+            <h3>Spring Boot TODO + Docker</h3>
+            <p class="meta">Spring + JPA + MySQL, Dockerfile/Compose로 로컬 개발환경 표준화</p>
+            <div style="display:flex; gap:8px; flex-wrap:wrap">
+              <span class="pill">Spring</span><span class="pill">JPA</span><span class="pill">MySQL</span><span class="pill">Docker</span>
+            </div>
+            <a class="btn secondary" href="#" target="_blank" rel="noopener">Repository</a>
+          </article>
+
+          <article class="card project col-6">
+            <h3>AWS VPC 설계 노트</h3>
+            <p class="meta">공용/사설 서브넷, NAT/IGW/라우팅, 보안그룹·NACL 설계와 베스트프랙티스</p>
+            <div style="display:flex; gap:8px; flex-wrap:wrap">
+              <span class="pill">AWS</span><span class="pill">VPC</span><span class="pill">Security</span>
+            </div>
+            <a class="btn secondary" href="#" target="_blank" rel="noopener">Docs</a>
+          </article>
+
+          <article class="card project col-6">
+            <h3>SQL Lab</h3>
+            <p class="meta">ERD → DDL 설계 → 더미데이터 → 쿼리 튜닝 과정 정리</p>
+            <div style="display:flex; gap:8px; flex-wrap:wrap">
+              <span class="pill">SQL</span><span class="pill">Index</span><span class="pill">TX</span>
+            </div>
+            <a class="btn secondary" href="#" target="_blank" rel="noopener">Playground</a>
+          </article>
+
+          <article class="card project col-6">
+            <h3>EC2 비용 계산기(미니)</h3>
+            <p class="meta">인스턴스 타입·시간·스토리지 입력 기반 비용 추정 (정적 페이지)</p>
+            <div style="display:flex; gap:8px; flex-wrap:wrap">
+              <span class="pill">HTML</span><span class="pill">CSS</span>
+            </div>
+            <a class="btn secondary" href="#" target="_blank" rel="noopener">Demo</a>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="til">
+      <div class="container">
+        <div class="section-title"><h2>오늘의 학습 (TIL)</h2><span class="hint">근거와 에러로그 중심</span></div>
+        <div class="grid">
+          <div class="card col-6">
+            <h3 style="margin:0 0 8px;">2025-08-19</h3>
+            <ul class="list" style="padding-left:18px;">
+              <li>Java 예외 전파 & try-with-resources 정리</li>
+              <li>MySQL 트랜잭션 격리수준 실습 (REPEATABLE READ)</li>
+              <li>Docker Compose로 앱+DB 로컬 통합 실행</li>
+            </ul>
+          </div>
+          <div class="card col-6">
+            <h3 style="margin:0 0 8px;">2025-08-18</h3>
+            <ul class="list" style="padding-left:18px;">
+              <li>VPC 서브넷 설계 연습: /24 vs /26 용량 비교</li>
+              <li>보안그룹 최소권한 규칙 표준안 작성</li>
+              <li>JPA N+1 케이스 수집 및 해결책 메모</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="certs">
+      <div class="container">
+        <div class="section-title"><h2>자격·목표 타임라인</h2><span class="hint">계획은 유동적으로 조정</span></div>
+        <div class="card">
+          <div class="timeline">
+            <div class="t-item"><strong>2025 Q3</strong> · AWS SAA 이론/실습 마무리, 모의고사 주 2회</div>
+            <div class="t-item"><strong>2025 Q4</strong> · Kubernetes 기초 & Spring Boot 운영 자동화 맛보기</div>
+            <div class="t-item"><strong>2026 상반기</strong> · SAA 취득 → 실무형 프로젝트 확대(모니터링/로깅 포함)</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact">
+      <div class="container">
+        <div class="section-title"><h2>연락 & 링크</h2><span class="hint">협업을 환영합니다</span></div>
+        <div class="grid">
+          <div class="card col-6">
+            <h3 style="margin:0 0 6px;">소셜</h3>
+            <p class="meta">GitHub, 블로그, 이메일 링크를 최신으로 유지하세요.</p>
+            <p>
+              <a class="link" href="https://github.com/kwakmh" target="_blank" rel="noopener">GitHub</a> ·
+              <a class="link" href="#" target="_blank" rel="noopener">기술 블로그</a> ·
+              <a class="link" href="mailto:your.name@example.com">이메일</a>
+            </p>
+          </div>
+          <div class="card col-6">
+            <h3 style="margin:0 0 6px;">이력 요약</h3>
+            <ul class="list" style="padding-left:18px;">
+              <li>관심 분야: VPC 설계, 비용 최적화, 관측성(Observability)</li>
+              <li>가치관: 단순함·재현성·보안</li>
+              <li>오픈소스 이슈 참여 목표 (good first issue)</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <div class="container">
+        © <span id="y">2025</span> 무현 곽 · Built with HTML + CSS only · 호스팅: GitHub Pages
+      </div>
+    </footer>
+  </main>
+
 </body>
 </html>
